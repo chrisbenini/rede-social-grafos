@@ -72,7 +72,7 @@ MATCH (u:User)<-[:FOLLOWS]-(followers)
 RETURN u.name AS usuario, COUNT(followers) AS seguidores
 ORDER BY seguidores DESC;
 ```
-###⭐ Posts mais populares
+### ⭐ Posts mais populares
 ```cypher
 Copiar código
 MATCH (p:Post)<-[:LIKED]-(u:User)
@@ -80,7 +80,7 @@ RETURN p.content AS post, COUNT(u) AS likes
 ORDER BY likes DESC;]
 ```
 
-###⭐ Hashtags mais usadas
+### ⭐ Hashtags mais usadas
 ```cypher
 Copiar código
 MATCH (p:Post)-[:HAS_HASHTAG]->(h:Hashtag)
@@ -88,7 +88,7 @@ RETURN h.tag AS hashtag, COUNT(p) AS total_posts
 ORDER BY total_posts DESC;
 ```
 
-###⭐ Recomendar pessoas para seguir (seguidores em comum)
+### ⭐ Recomendar pessoas para seguir (seguidores em comum)
 ```cypher
 Copiar código
 MATCH (me:User {name:"Alice"})-[:FOLLOWS]->(mid:User)-[:FOLLOWS]->(rec:User)
@@ -96,7 +96,7 @@ WHERE rec <> me
 RETURN DISTINCT rec.name AS recomendacao;
 ```
 
-###⭐ Engajamento por usuário
+### ⭐ Engajamento por usuário
 ```cypher
 Copiar código
 MATCH (u:User)-[:LIKED]->(p:Post)
@@ -105,21 +105,21 @@ RETURN u.name AS usuario, COUNT(p) AS total_likes_dados;
 Acesse o Neo4j AuraDB Free
 ```
 
-Abra o editor Cypher
+### Abra o editor Cypher
 ```cypher
 Execute create_nodes.cypher
 Depois execute create_relationships.cypher
 Use o arquivo queries.cypher para explorar o grafo
 ```
 
-🛠 Tecnologias Utilizadas
+### 🛠 Tecnologias Utilizadas
 ```cypher
 Neo4j AuraDB Free
 Cypher Query Language
 GitHub para versionamento
 ```
 
-###📌 Objetivo do Projeto
+### 📌 Objetivo do Projeto
 ```cypher
 Demonstrar como grafos são extremamente eficientes para entender interações sociais, identificar influenciadores, analisar comportamento de usuários e descobrir comunidades de interesse.
 
