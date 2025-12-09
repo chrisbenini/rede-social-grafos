@@ -79,3 +79,39 @@ MATCH (me:User {name:"Alice"})-[:FOLLOWS]->(mid:User)-[:FOLLOWS]->(rec:User)
 WHERE rec <> me
 RETURN DISTINCT rec.name AS recomendacao;
 ```
+
+✔ Tecnologias Utilizadas
+
+Neo4j AuraDB Free
+Cypher Query Language
+GitHub para versionamento
+
+📌 Objetivo do Projeto
+
+Responder perguntas complexas sobre engajamento, influência e comunidades dentro de uma rede social utilizando grafos.
+
+---
+
+# ✅ **2. Conteúdo final dos arquivos `.cypher`**
+
+## 📄 **create_nodes.cypher**
+(garanta que está assim)
+
+```cypher
+CREATE (:User {name: "Alice"});
+CREATE (:User {name: "Bob"});
+CREATE (:User {name: "Carol"});
+CREATE (:User {name: "Daniel"});
+
+CREATE (:Hashtag {tag: "#tech"});
+CREATE (:Hashtag {tag: "#games"});
+CREATE (:Hashtag {tag: "#travel"});
+
+CREATE (:Group {name: "Gamers"});
+CREATE (:Group {name: "Viajantes"});
+
+CREATE (:Post {content: "Meu novo PC gamer!", likes: 0});
+CREATE (:Post {content: "Visitando o Japão!", likes: 0});
+CREATE (:Post {content: "Robôs estão dominando tudo!", likes: 0});
+
+CREATE (:Comment {text: "Muito legal!"});
