@@ -1,59 +1,66 @@
-# 📊 Rede Social – Banco de Dados em Grafos com Neo4j
+<h1 align="center">📊 Rede Social – Banco de Dados em Grafos com Neo4j</h1>
 
-Este projeto implementa um protótipo funcional de uma rede social utilizando o banco de dados Neo4j.  
-O objetivo é demonstrar como grafos podem ser usados para analisar:
+<p align="center">
+  <strong>Projeto de análise de interações sociais utilizando modelo de grafos</strong><br>
+  Usuários • Posts • Comentários • Hashtags • Grupos • Engajamento • Comunidades
+</p>
 
-- conexões entre usuários  
-- engajamento (curtidas, comentários)  
-- popularidade de posts  
-- hashtags e temas mais discutidos  
-- formação de comunidades e interesses em comum  
-- recomendações inteligentes
+---
+
+## 🧠 Sobre o Projeto
+
+Uma startup de análise de mídias sociais deseja entender padrões de conexão, engajamento e comunidades formadas dentro da plataforma.  
+Este projeto apresenta um protótipo funcional utilizando **Neo4j**, explorando a modelagem de relacionamentos e consultas avançadas para responder perguntas como:
+
+- Quem são os usuários mais influentes?
+- Quais posts são mais populares?
+- Como hashtags agrupam comunidades?
+- Como recomendar pessoas com interesses semelhantes?
+- Quais grupos possuem maior atividade?
+
+Este repositório contém toda a estrutura do grafo, scripts Cypher e consultas prontas para análise.
 
 ---
 
 ## 🧩 Modelagem do Grafo
 
-### 🧑‍🤝‍🧑 **Nós criados:**
+### 🧑‍🤝‍🧑 **Nós Criados**
 
-- **User** – representa um usuário da rede social  
+- **User** – representa uma pessoa na rede social  
 - **Post** – conteúdo publicado  
-- **Comment** – comentários feitos em posts  
-- **Hashtag** – assuntos marcados em posts  
-- **Group** – grupos e comunidades da plataforma  
+- **Comment** – comentários em posts  
+- **Hashtag** – assuntos discutidos  
+- **Group** – comunidades e interesses  
 
----
+### 🔗 **Relacionamentos Utilizados**
 
-### 🔗 **Relacionamentos utilizados:**
-
-- `(:User)-[:FOLLOWS]->(:User)` – um usuário segue outro  
-- `(:User)-[:POSTED]->(:Post)` – publicação de um post  
-- `(:User)-[:LIKED]->(:Post)` – curtida  
-- `(:User)-[:COMMENTED]->(:Comment)` – comentário feito  
+- `(:User)-[:FOLLOWS]->(:User)` – usuário segue outro usuário  
+- `(:User)-[:POSTED]->(:Post)` – criação de uma postagem  
+- `(:User)-[:LIKED]->(:Post)` – curtida em um post  
+- `(:User)-[:COMMENTED]->(:Comment)` – fez um comentário  
 - `(:Comment)-[:ON_POST]->(:Post)` – comentário pertence ao post  
-- `(:Post)-[:HAS_HASHTAG]->(:Hashtag)` – post contém uma hashtag  
-- `(:User)-[:MEMBER_OF]->(:Group)` – usuário participa de um grupo  
-- `(:Group)-[:HAS_POST]->(:Post)` – grupo contém posts  
+- `(:Post)-[:HAS_HASHTAG]->(:Hashtag)` – marcação de hashtags  
+- `(:User)-[:MEMBER_OF]->(:Group)` – usuário pertence a um grupo  
+- `(:Group)-[:HAS_POST]->(:Post)` – posts dentro de grupos  
 
 ---
 
-## 🏗 Scripts do Projeto
+## 🏗 Estrutura do Projeto
 
 ### 📄 `create_nodes.cypher`
-Cria todos os usuários, posts, comentários, hashtags e grupos.
+Criação de todos os nós iniciais do grafo:
+
+- Usuários  
+- Posts  
+- Comentários  
+- Hashtags  
+- Grupos  
 
 ### 📄 `create_relationships.cypher`
-Cria todas as relações de curtidas, comentários, postagens e seguidores.
+Estabelece os relacionamentos entre usuários, posts, hashtags e grupos.
 
 ### 📄 `queries.cypher`
-Contém consultas para:
-
-- usuários mais influentes  
-- posts mais populares  
-- hashtags mais usadas  
-- recomendações de usuários  
-- engajamento por tema  
-- comportamento de comunidades  
+Consultas exploratórias e avançadas para análise de interação e engajamento.
 
 ---
 
@@ -65,53 +72,56 @@ MATCH (u:User)<-[:FOLLOWS]-(followers)
 RETURN u.name AS usuario, COUNT(followers) AS seguidores
 ORDER BY seguidores DESC;
 ```
-
-### ⭐ Posts mais populares
+###⭐ Posts mais populares
 ```cypher
+Copiar código
 MATCH (p:Post)<-[:LIKED]-(u:User)
 RETURN p.content AS post, COUNT(u) AS likes
-ORDER BY likes DESC;
+ORDER BY likes DESC;]
 ```
 
-### ⭐ Recomendar pessoas para seguir
+###⭐ Hashtags mais usadas
 ```cypher
+Copiar código
+MATCH (p:Post)-[:HAS_HASHTAG]->(h:Hashtag)
+RETURN h.tag AS hashtag, COUNT(p) AS total_posts
+ORDER BY total_posts DESC;
+```
+
+###⭐ Recomendar pessoas para seguir (seguidores em comum)
+```cypher
+Copiar código
 MATCH (me:User {name:"Alice"})-[:FOLLOWS]->(mid:User)-[:FOLLOWS]->(rec:User)
 WHERE rec <> me
 RETURN DISTINCT rec.name AS recomendacao;
 ```
 
-✔ Tecnologias Utilizadas
+###⭐ Engajamento por usuário
+```cypher
+Copiar código
+MATCH (u:User)-[:LIKED]->(p:Post)
+RETURN u.name AS usuario, COUNT(p) AS total_likes_dados;
+###🚀 Como Executar
+Acesse o Neo4j AuraDB Free
+```
 
+Abra o editor Cypher
+```cypher
+Execute create_nodes.cypher
+Depois execute create_relationships.cypher
+Use o arquivo queries.cypher para explorar o grafo
+```
+
+🛠 Tecnologias Utilizadas
+```cypher
 Neo4j AuraDB Free
 Cypher Query Language
 GitHub para versionamento
+```
 
-📌 Objetivo do Projeto
-
-Responder perguntas complexas sobre engajamento, influência e comunidades dentro de uma rede social utilizando grafos.
-
----
-
-# ✅ **2. Conteúdo final dos arquivos `.cypher`**
-
-## 📄 **create_nodes.cypher**
-(garanta que está assim)
-
+###📌 Objetivo do Projeto
 ```cypher
-CREATE (:User {name: "Alice"});
-CREATE (:User {name: "Bob"});
-CREATE (:User {name: "Carol"});
-CREATE (:User {name: "Daniel"});
+Demonstrar como grafos são extremamente eficientes para entender interações sociais, identificar influenciadores, analisar comportamento de usuários e descobrir comunidades de interesse.
 
-CREATE (:Hashtag {tag: "#tech"});
-CREATE (:Hashtag {tag: "#games"});
-CREATE (:Hashtag {tag: "#travel"});
-
-CREATE (:Group {name: "Gamers"});
-CREATE (:Group {name: "Viajantes"});
-
-CREATE (:Post {content: "Meu novo PC gamer!", likes: 0});
-CREATE (:Post {content: "Visitando o Japão!", likes: 0});
-CREATE (:Post {content: "Robôs estão dominando tudo!", likes: 0});
-
-CREATE (:Comment {text: "Muito legal!"});
+<h3 align="center">✨ Projeto finalizado com sucesso! ✨</h3>
+```
